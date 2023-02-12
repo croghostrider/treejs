@@ -1,4 +1,4 @@
-export default function(_options) {
+export default function (_options) {
   const defaultOptions = {
     method: 'GET',
     url: '',
@@ -6,44 +6,44 @@ export default function(_options) {
     success: null,
     failed: null,
     data: {},
-    'Content-Type': 'application/json; charset=utf-8',
-  };
-  const options = Object.assign(defaultOptions, _options);
-  const xhr = new XMLHttpRequest();
+    'Content-Type': 'application/json; charset=utf-8'
+  }
+  const options = Object.assign(defaultOptions, _options)
+  const xhr = new XMLHttpRequest()
 
   const postData = Object.entries(options.data)
     .reduce((acc, [key, value]) => {
-      acc.push(`${key}=${value}`);
-      return acc;
+      acc.push(`${key}=${value}`)
+      return acc
     }, [])
-    .join('&');
+    .join('&')
 
   if (options.method.toUpperCase() === 'POST') {
-    xhr.open(options.method, options.url, options.async);
-    xhr.setRequestHeader('Content-Type', options['Content-Type']);
-    xhr.send(postData);
+    xhr.open(options.method, options.url, options.async)
+    xhr.setRequestHeader('Content-Type', options['Content-Type'])
+    xhr.send(postData)
   } else if (options.method.toUpperCase() === 'GET') {
-    let {url} = options;
+    let { url } = options
     if (postData) {
       if (url.indexOf('?') !== -1) {
-        url += `&${postData}`;
+        url += `&${postData}`
       } else {
-        url += `&${postData}`;
+        url += `&${postData}`
       }
     }
-    xhr.open(options.method, url, options.async);
-    xhr.setRequestHeader('Content-Type', options['Content-Type']);
-    xhr.send(null);
+    xhr.open(options.method, url, options.async)
+    xhr.setRequestHeader('Content-Type', options['Content-Type'])
+    xhr.send(null)
   }
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      let res = xhr.responseText;
+      let res = xhr.responseText
       if (options['Content-Type'] === defaultOptions['Content-Type']) {
-        res = JSON.parse(res);
+        res = JSON.parse(res)
       }
-      options.success && options.success(res);
+      options.success && options.success(res)
     } else {
-      options.failed && options.failed(xhr.status);
+      options.failed && options.failed(xhr.status)
     }
-  };
+  }
 }
