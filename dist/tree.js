@@ -12,761 +12,49 @@
 		exports["Tree"] = factory();
 	else
 		root["Tree"] = factory();
-})(window, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = Tree;
-
-var _ajax = _interopRequireDefault(__webpack_require__(1));
-
-__webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function deepClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function uniq(arr) {
-  var map = {};
-  return arr.reduce(function (acc, item) {
-    if (!map[item]) {
-      map[item] = true;
-      acc.push(item);
-    }
-
-    return acc;
-  }, []);
-}
-
-function empty(ele) {
-  while (ele.firstChild) {
-    ele.removeChild(ele.firstChild);
-  }
-}
-
-function animation(duration, callback) {
-  requestAnimationFrame(function () {
-    callback.enter();
-    requestAnimationFrame(function () {
-      callback.active();
-      setTimeout(function () {
-        callback.leave();
-      }, duration);
-    });
-  });
-}
-
-function collapseFromLeaf(tree, leafNode) {
-  try {
-    var nodeLiElement = tree.liElementsById[leafNode.parent.id];
-    if (!nodeLiElement.classList.contains('treejs-node__close')) nodeLiElement.getElementsByClassName('treejs-switcher')[0].click();
-  } catch (error) {
-    return;
-  }
-
-  if (leafNode.hasOwnProperty('parent')) collapseFromLeaf(tree, leafNode.parent);
-}
-
-function expandFromRoot(tree, root) {
-  var nodeLiElement = tree.liElementsById[root.id];
-  if (nodeLiElement.classList.contains('treejs-node__close')) nodeLiElement.getElementsByClassName('treejs-switcher')[0].click();
-
-  if (root.hasOwnProperty('children')) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = root.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var child = _step.value;
-        expandFromRoot(tree, child);
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-  }
-}
-
-function Tree(container, options) {
-  var _this = this;
-
-  var defaultOptions = {
-    selectMode: 'checkbox',
-    values: [],
-    disables: [],
-    beforeLoad: null,
-    loaded: null,
-    url: null,
-    method: 'GET',
-    closeDepth: null
-  };
-  this.treeNodes = [];
-  this.nodesById = {};
-  this.leafNodesById = {};
-  this.liElementsById = {};
-  this.willUpdateNodesById = {};
-  this.container = container;
-  this.options = Object.assign(defaultOptions, options);
-  Object.defineProperties(this, {
-    values: {
-      get: function get() {
-        return this.getValues();
-      },
-      set: function set(values) {
-        return this.setValues(uniq(values));
-      }
-    },
-    disables: {
-      get: function get() {
-        return this.getDisables();
-      },
-      set: function set(values) {
-        return this.setDisables(uniq(values));
-      }
-    },
-    selectedNodes: {
-      get: function get() {
-        var nodes = [];
-        var nodesById = this.nodesById;
-
-        for (var id in nodesById) {
-          if (nodesById.hasOwnProperty(id) && (nodesById[id].status === 1 || nodesById[id].status === 2)) {
-            var node = Object.assign({}, nodesById[id]);
-            delete node.parent;
-            delete node.children;
-            nodes.push(node);
-          }
-        }
-
-        return nodes;
-      }
-    },
-    disabledNodes: {
-      get: function get() {
-        var nodes = [];
-        var nodesById = this.nodesById;
-
-        for (var id in nodesById) {
-          if (nodesById.hasOwnProperty(id) && nodesById[id].disabled) {
-            var node = Object.assign({}, nodesById[id]);
-            delete node.parent;
-            nodes.push(node);
-          }
-        }
-
-        return nodes;
-      }
-    }
-  });
-
-  if (this.options.url) {
-    this.load(function (data) {
-      _this.init(data);
-    });
-  } else {
-    this.init(this.options.data);
-  }
-}
-
-Tree.prototype.init = function (data) {
-  console.time('init');
-
-  var _Tree$parseTreeData = Tree.parseTreeData(data),
-      treeNodes = _Tree$parseTreeData.treeNodes,
-      nodesById = _Tree$parseTreeData.nodesById,
-      leafNodesById = _Tree$parseTreeData.leafNodesById,
-      defaultValues = _Tree$parseTreeData.defaultValues,
-      defaultDisables = _Tree$parseTreeData.defaultDisables;
-
-  this.treeNodes = treeNodes;
-  this.nodesById = nodesById;
-  this.leafNodesById = leafNodesById;
-  this.render(this.treeNodes);
-  var _this$options = this.options,
-      values = _this$options.values,
-      disables = _this$options.disables,
-      loaded = _this$options.loaded;
-  if (values && values.length) defaultValues = values;
-  defaultValues.length && this.setValues(defaultValues);
-  if (disables && disables.length) defaultDisables = disables;
-  defaultDisables.length && this.setDisables(defaultDisables);
-  loaded && loaded.call(this);
-  console.timeEnd('init');
-};
-
-Tree.prototype.load = function (callback) {
-  console.time('load');
-  var _this$options2 = this.options,
-      url = _this$options2.url,
-      method = _this$options2.method,
-      beforeLoad = _this$options2.beforeLoad;
-  (0, _ajax.default)({
-    url: url,
-    method: method,
-    success: function success(result) {
-      var data = result;
-      console.timeEnd('load');
-
-      if (beforeLoad) {
-        data = beforeLoad(result);
-      }
-
-      callback(data);
-    }
-  });
-};
-
-Tree.prototype.render = function (treeNodes) {
-  var treeEle = Tree.createRootEle();
-  treeEle.appendChild(this.buildTree(treeNodes, 0));
-  this.bindEvent(treeEle);
-  var ele = document.querySelector(this.container);
-  empty(ele);
-  ele.appendChild(treeEle);
-};
-
-Tree.prototype.buildTree = function (nodes, depth) {
-  var _this2 = this;
-
-  var rootUlEle = Tree.createUlEle();
-
-  if (nodes && nodes.length) {
-    nodes.forEach(function (node) {
-      var liEle = Tree.createLiEle(node, depth === _this2.options.closeDepth - 1);
-      _this2.liElementsById[node.id] = liEle;
-      var ulEle = null;
-
-      if (node.children && node.children.length) {
-        ulEle = _this2.buildTree(node.children, depth + 1);
-      }
-
-      ulEle && liEle.appendChild(ulEle);
-      rootUlEle.appendChild(liEle);
-    });
-  }
-
-  return rootUlEle;
-};
-
-Tree.prototype.bindEvent = function (ele) {
-  var _this3 = this;
-
-  ele.addEventListener('click', function (e) {
-    var target = e.target;
-
-    if (target.nodeName === 'SPAN' && (target.classList.contains('treejs-checkbox') || target.classList.contains('treejs-label'))) {
-      _this3.onItemClick(target.parentNode.nodeId);
-    } else if (target.nodeName === 'LI' && target.classList.contains('treejs-node')) {
-      _this3.onItemClick(target.nodeId);
-    } else if (target.nodeName === 'SPAN' && target.classList.contains('treejs-switcher')) {
-      _this3.onSwitcherClick(target);
-    }
-  }, false);
-};
-
-Tree.prototype.onItemClick = function (id) {
-  console.time('onItemClick');
-  var node = this.nodesById[id];
-  var onChange = this.options.onChange;
-
-  if (!node.disabled) {
-    this.setValue(id);
-    this.updateLiElements();
-  }
-
-  onChange && onChange.call(this);
-  console.timeEnd('onItemClick');
-};
-
-Tree.prototype.setValue = function (value) {
-  var node = this.nodesById[value];
-  if (!node) return;
-  var prevStatus = node.status;
-  var status = prevStatus === 1 || prevStatus === 2 ? 0 : 2;
-  node.status = status;
-  this.markWillUpdateNode(node);
-  this.walkUp(node, 'status');
-  this.walkDown(node, 'status');
-};
-
-Tree.prototype.getValues = function () {
-  var values = [];
-
-  for (var id in this.leafNodesById) {
-    if (this.leafNodesById.hasOwnProperty(id)) {
-      if (this.leafNodesById[id].status === 1 || this.leafNodesById[id].status === 2) {
-        values.push(id);
-      }
-    }
-  }
-
-  return values;
-};
-
-Tree.prototype.setValues = function (values) {
-  var _this4 = this;
-
-  this.emptyNodesCheckStatus();
-  values.forEach(function (value) {
-    _this4.setValue(value);
-  });
-  this.updateLiElements();
-  var onChange = this.options.onChange;
-  onChange && onChange.call(this);
-};
-
-Tree.prototype.setDisable = function (value) {
-  var node = this.nodesById[value];
-  if (!node) return;
-  var prevDisabled = node.disabled;
-
-  if (!prevDisabled) {
-    node.disabled = true;
-    this.markWillUpdateNode(node);
-    this.walkUp(node, 'disabled');
-    this.walkDown(node, 'disabled');
-  }
-};
-
-Tree.prototype.getDisables = function () {
-  var values = [];
-
-  for (var id in this.leafNodesById) {
-    if (this.leafNodesById.hasOwnProperty(id)) {
-      if (this.leafNodesById[id].disabled) {
-        values.push(id);
-      }
-    }
-  }
-
-  return values;
-};
-
-Tree.prototype.setDisables = function (values) {
-  var _this5 = this;
-
-  this.emptyNodesDisable();
-  values.forEach(function (value) {
-    _this5.setDisable(value);
-  });
-  this.updateLiElements();
-};
-
-Tree.prototype.emptyNodesCheckStatus = function () {
-  this.willUpdateNodesById = this.getSelectedNodesById();
-  Object.values(this.willUpdateNodesById).forEach(function (node) {
-    if (!node.disabled) node.status = 0;
-  });
-};
-
-Tree.prototype.emptyNodesDisable = function () {
-  this.willUpdateNodesById = this.getDisabledNodesById();
-  Object.values(this.willUpdateNodesById).forEach(function (node) {
-    node.disabled = false;
-  });
-};
-
-Tree.prototype.getSelectedNodesById = function () {
-  return Object.entries(this.nodesById).reduce(function (acc, _ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        id = _ref2[0],
-        node = _ref2[1];
-
-    if (node.status === 1 || node.status === 2) {
-      acc[id] = node;
-    }
-
-    return acc;
-  }, {});
-};
-
-Tree.prototype.getDisabledNodesById = function () {
-  return Object.entries(this.nodesById).reduce(function (acc, _ref3) {
-    var _ref4 = _slicedToArray(_ref3, 2),
-        id = _ref4[0],
-        node = _ref4[1];
-
-    if (node.disabled) {
-      acc[id] = node;
-    }
-
-    return acc;
-  }, {});
-};
-
-Tree.prototype.updateLiElements = function () {
-  var _this6 = this;
-
-  Object.values(this.willUpdateNodesById).forEach(function (node) {
-    _this6.updateLiElement(node);
-  });
-  this.willUpdateNodesById = {};
-};
-
-Tree.prototype.markWillUpdateNode = function (node) {
-  this.willUpdateNodesById[node.id] = node;
-};
-
-Tree.prototype.onSwitcherClick = function (target) {
-  var liEle = target.parentNode;
-  var ele = liEle.lastChild;
-  var height = ele.scrollHeight;
-
-  if (liEle.classList.contains('treejs-node__close')) {
-    animation(150, {
-      enter: function enter() {
-        ele.style.height = 0;
-        ele.style.opacity = 0;
-      },
-      active: function active() {
-        ele.style.height = "".concat(height, "px");
-        ele.style.opacity = 1;
-      },
-      leave: function leave() {
-        ele.style.height = '';
-        ele.style.opacity = '';
-        liEle.classList.remove('treejs-node__close');
-      }
-    });
-  } else {
-    animation(150, {
-      enter: function enter() {
-        ele.style.height = "".concat(height, "px");
-        ele.style.opacity = 1;
-      },
-      active: function active() {
-        ele.style.height = 0;
-        ele.style.opacity = 0;
-      },
-      leave: function leave() {
-        ele.style.height = '';
-        ele.style.opacity = '';
-        liEle.classList.add('treejs-node__close');
-      }
-    });
-  }
-};
-
-Tree.prototype.walkUp = function (node, changeState) {
-  var parent = node.parent;
-
-  if (parent) {
-    if (changeState === 'status') {
-      var pStatus = null;
-      var statusCount = parent.children.reduce(function (acc, child) {
-        if (!isNaN(child.status)) return acc + child.status;
-        return acc;
-      }, 0);
-
-      if (statusCount) {
-        pStatus = statusCount === parent.children.length * 2 ? 2 : 1;
-      } else {
-        pStatus = 0;
-      }
-
-      if (parent.status === pStatus) return;
-      parent.status = pStatus;
-    } else {
-      var pDisabled = parent.children.reduce(function (acc, child) {
-        return acc && child.disabled;
-      }, true);
-      if (parent.disabled === pDisabled) return;
-      parent.disabled = pDisabled;
-    }
-
-    this.markWillUpdateNode(parent);
-    this.walkUp(parent, changeState);
-  }
-};
-
-Tree.prototype.walkDown = function (node, changeState) {
-  var _this7 = this;
-
-  if (node.children && node.children.length) {
-    node.children.forEach(function (child) {
-      if (changeState === 'status' && child.disabled) return;
-      child[changeState] = node[changeState];
-
-      _this7.markWillUpdateNode(child);
-
-      _this7.walkDown(child, changeState);
-    });
-  }
-};
-
-Tree.prototype.updateLiElement = function (node) {
-  var classList = this.liElementsById[node.id].classList;
-
-  switch (node.status) {
-    case 0:
-      classList.remove('treejs-node__halfchecked', 'treejs-node__checked');
-      break;
-
-    case 1:
-      classList.remove('treejs-node__checked');
-      classList.add('treejs-node__halfchecked');
-      break;
-
-    case 2:
-      classList.remove('treejs-node__halfchecked');
-      classList.add('treejs-node__checked');
-      break;
-  }
-
-  switch (node.disabled) {
-    case true:
-      if (!classList.contains('treejs-node__disabled')) classList.add('treejs-node__disabled');
-      break;
-
-    case false:
-      if (classList.contains('treejs-node__disabled')) classList.remove('treejs-node__disabled');
-      break;
-  }
-};
-
-Tree.prototype.collapseAll = function () {
-  var leafNodesById = this.leafNodesById;
-
-  for (var id in leafNodesById) {
-    var leafNode = leafNodesById[id];
-    collapseFromLeaf(this, leafNode);
-  }
-};
-
-Tree.prototype.expandAll = function () {
-  expandFromRoot(this, this.treeNodes[0]);
-};
-
-Tree.parseTreeData = function (data) {
-  var treeNodes = deepClone(data);
-  var nodesById = {};
-  var leafNodesById = {};
-  var values = [];
-  var disables = [];
-
-  var walkTree = function walkTree(nodes, parent) {
-    nodes.forEach(function (node) {
-      nodesById[node.id] = node;
-      if (node.checked) values.push(node.id);
-      if (node.disabled) disables.push(node.id);
-      if (parent) node.parent = parent;
-
-      if (node.children && node.children.length) {
-        walkTree(node.children, node);
-      } else {
-        leafNodesById[node.id] = node;
-      }
-    });
-  };
-
-  walkTree(treeNodes);
-  return {
-    treeNodes: treeNodes,
-    nodesById: nodesById,
-    leafNodesById: leafNodesById,
-    defaultValues: values,
-    defaultDisables: disables
-  };
-};
-
-Tree.createRootEle = function () {
-  var div = document.createElement('div');
-  div.classList.add('treejs');
-  return div;
-};
-
-Tree.createUlEle = function () {
-  var ul = document.createElement('ul');
-  ul.classList.add('treejs-nodes');
-  return ul;
-};
-
-Tree.createLiEle = function (node, closed) {
-  var li = document.createElement('li');
-  li.classList.add('treejs-node');
-  if (closed) li.classList.add('treejs-node__close');
-
-  if (node.children && node.children.length) {
-    var switcher = document.createElement('span');
-    switcher.classList.add('treejs-switcher');
-    li.appendChild(switcher);
-  } else {
-    li.classList.add('treejs-placeholder');
-  }
-
-  var checkbox = document.createElement('span');
-  checkbox.classList.add('treejs-checkbox');
-  li.appendChild(checkbox);
-  var label = document.createElement('span');
-  label.classList.add('treejs-label');
-  var text = document.createTextNode(node.text);
-  label.appendChild(text);
-  li.appendChild(label);
-  li.nodeId = node.id;
-  return li;
-};
-
-/***/ }),
+})(self, function() {
+return /******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ([
+/* 0 */,
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
+/* harmony export */ });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _default(_options) {
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(_options) {
   var defaultOptions = {
     method: 'GET',
     url: '',
     async: true,
     success: null,
     failed: null,
+    data: {},
     'Content-Type': 'application/json; charset=utf-8'
   };
   var options = Object.assign(defaultOptions, _options);
   var xhr = new XMLHttpRequest();
   var postData = Object.entries(options.data).reduce(function (acc, _ref) {
     var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        value = _ref2[1];
-
+      key = _ref2[0],
+      value = _ref2[1];
     acc.push("".concat(key, "=").concat(value));
     return acc;
   }, []).join('&');
-
   if (options.method.toUpperCase() === 'POST') {
     xhr.open(options.method, options.url, options.async);
     xhr.setRequestHeader('Content-Type', options['Content-Type']);
     xhr.send(postData);
   } else if (options.method.toUpperCase() === 'GET') {
     var url = options.url;
-
     if (postData) {
       if (url.indexOf('?') !== -1) {
         url += "&".concat(postData);
@@ -774,20 +62,16 @@ function _default(_options) {
         url += "&".concat(postData);
       }
     }
-
     xhr.open(options.method, url, options.async);
     xhr.setRequestHeader('Content-Type', options['Content-Type']);
     xhr.send(null);
   }
-
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       var res = xhr.responseText;
-
       if (options['Content-Type'] === defaultOptions['Content-Type']) {
         res = JSON.parse(res);
       }
-
       options.success && options.success(res);
     } else {
       options.failed && options.failed(xhr.status);
@@ -797,12 +81,12 @@ function _default(_options) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
 var content = __webpack_require__(3);
 
-if(typeof content === 'string') content = [[module.i, content, '']];
+if(typeof content === 'string') content = [[module.id, content, '']];
 
 var transform;
 var insertInto;
@@ -829,14 +113,14 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, ".treejs {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  font-size: 14px;\n}\n.treejs *:after,\n.treejs *:before {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.treejs > .treejs-node {\n  padding-left: 0;\n}\n.treejs .treejs-nodes {\n  list-style: none;\n  padding-left: 20px;\n  overflow: hidden;\n  -webkit-transition: height 150ms ease-out, opacity 150ms ease-out;\n  -o-transition: height 150ms ease-out, opacity 150ms ease-out;\n  transition: height 150ms ease-out, opacity 150ms ease-out;\n}\n.treejs .treejs-node {\n  cursor: pointer;\n  overflow: hidden;\n}\n.treejs .treejs-node.treejs-placeholder {\n  padding-left: 20px;\n}\n.treejs .treejs-switcher {\n  display: inline-block;\n  vertical-align: middle;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  position: relative;\n  -webkit-transition: -webkit-transform 150ms ease-out;\n  transition: -webkit-transform 150ms ease-out;\n  -o-transition: transform 150ms ease-out;\n  transition: transform 150ms ease-out;\n  transition: transform 150ms ease-out, -webkit-transform 150ms ease-out;\n}\n.treejs .treejs-switcher:before {\n  position: absolute;\n  top: 8px;\n  left: 6px;\n  display: block;\n  content: ' ';\n  border: 4px solid transparent;\n  border-top: 4px solid rgba(0, 0, 0, 0.4);\n  -webkit-transition: border-color 150ms;\n  -o-transition: border-color 150ms;\n  transition: border-color 150ms;\n}\n.treejs .treejs-switcher:hover:before {\n  border-top: 4px solid rgba(0, 0, 0, 0.65);\n}\n.treejs .treejs-node__close > .treejs-switcher {\n  -webkit-transform: rotate(-90deg);\n      -ms-transform: rotate(-90deg);\n          transform: rotate(-90deg);\n}\n.treejs .treejs-node__close > .treejs-nodes {\n  height: 0;\n}\n.treejs .treejs-checkbox {\n  display: inline-block;\n  vertical-align: middle;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  position: relative;\n}\n.treejs .treejs-checkbox:before {\n  -webkit-transition: all 0.3s;\n  -o-transition: all 0.3s;\n  transition: all 0.3s;\n  cursor: pointer;\n  position: absolute;\n  top: 2px;\n  content: ' ';\n  display: block;\n  width: 16px;\n  height: 16px;\n  border: 1px solid #d9d9d9;\n  border-radius: 2px;\n}\n.treejs .treejs-checkbox:hover:before {\n  -webkit-box-shadow: 0 0 2px 1px #1890ff;\n          box-shadow: 0 0 2px 1px #1890ff;\n}\n.treejs .treejs-node__checked > .treejs-checkbox:before {\n  background-color: #1890ff;\n  border-color: #1890ff;\n}\n.treejs .treejs-node__checked > .treejs-checkbox:after {\n  position: absolute;\n  content: ' ';\n  display: block;\n  top: 4px;\n  left: 5px;\n  width: 5px;\n  height: 9px;\n  border: 2px solid #fff;\n  border-top: none;\n  border-left: none;\n  -webkit-transform: rotate(45deg);\n      -ms-transform: rotate(45deg);\n          transform: rotate(45deg);\n}\n.treejs .treejs-node__halfchecked > .treejs-checkbox:before {\n  background-color: #1890ff;\n  border-color: #1890ff;\n}\n.treejs .treejs-node__halfchecked > .treejs-checkbox:after {\n  position: absolute;\n  content: ' ';\n  display: block;\n  top: 9px;\n  left: 3px;\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n}\n.treejs .treejs-node__disabled {\n  cursor: not-allowed;\n  color: rgba(0, 0, 0, 0.25);\n}\n.treejs .treejs-node__disabled .treejs-checkbox {\n  cursor: not-allowed;\n}\n.treejs .treejs-node__disabled .treejs-checkbox:before {\n  cursor: not-allowed;\n  border-color: #d9d9d9 !important;\n  background-color: #f5f5f5 !important;\n}\n.treejs .treejs-node__disabled .treejs-checkbox:hover:before {\n  -webkit-box-shadow: none !important;\n          box-shadow: none !important;\n}\n.treejs .treejs-node__disabled .treejs-node__checked > .treejs-checkbox:after {\n  border-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled .treejs-node__halfchecked > .treejs-checkbox:after {\n  background-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled.treejs-node__checked > .treejs-checkbox:after {\n  border-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled.treejs-node__halfchecked > .treejs-checkbox:after {\n  background-color: #d9d9d9;\n}\n.treejs .treejs-label {\n  vertical-align: middle;\n}\n", ""]);
+exports.push([module.id, ".treejs {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  font-size: 14px;\n}\n.treejs *:after,\n.treejs *:before {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.treejs > .treejs-node {\n  padding-left: 0;\n}\n.treejs .treejs-nodes {\n  list-style: none;\n  padding-left: 20px;\n  overflow: hidden;\n  -webkit-transition: height 150ms ease-out, opacity 150ms ease-out;\n  -o-transition: height 150ms ease-out, opacity 150ms ease-out;\n  transition: height 150ms ease-out, opacity 150ms ease-out;\n}\n.treejs .treejs-node {\n  cursor: pointer;\n  overflow: hidden;\n}\n.treejs .treejs-node.treejs-placeholder {\n  padding-left: 20px;\n}\n.treejs .treejs-switcher {\n  display: inline-block;\n  vertical-align: middle;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  position: relative;\n  -webkit-transition: -webkit-transform 150ms ease-out;\n  transition: -webkit-transform 150ms ease-out;\n  -o-transition: transform 150ms ease-out;\n  transition: transform 150ms ease-out;\n  transition: transform 150ms ease-out, -webkit-transform 150ms ease-out;\n}\n.treejs .treejs-switcher:before {\n  position: absolute;\n  top: 8px;\n  left: 6px;\n  display: block;\n  content: ' ';\n  border: 4px solid transparent;\n  border-top: 4px solid rgba(0, 0, 0, 0.4);\n  -webkit-transition: border-color 150ms;\n  -o-transition: border-color 150ms;\n  transition: border-color 150ms;\n}\n.treejs .treejs-switcher:hover:before {\n  border-top: 4px solid rgba(0, 0, 0, 0.65);\n}\n.treejs .treejs-node__close > .treejs-switcher {\n  -webkit-transform: rotate(-90deg);\n      -ms-transform: rotate(-90deg);\n          transform: rotate(-90deg);\n}\n.treejs .treejs-node__close > .treejs-nodes {\n  height: 0;\n}\n.treejs .treejs-checkbox {\n  display: inline-block;\n  vertical-align: middle;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  position: relative;\n}\n.treejs .treejs-checkbox:before {\n  -webkit-transition: all 0.3s;\n  -o-transition: all 0.3s;\n  transition: all 0.3s;\n  cursor: pointer;\n  position: absolute;\n  top: 2px;\n  content: ' ';\n  display: block;\n  width: 16px;\n  height: 16px;\n  border: 1px solid #d9d9d9;\n  border-radius: 2px;\n}\n.treejs .treejs-checkbox:hover:before {\n  -webkit-box-shadow: 0 0 2px 1px #1890ff;\n          box-shadow: 0 0 2px 1px #1890ff;\n}\n.treejs .treejs-node__checked > .treejs-checkbox:before {\n  background-color: #1890ff;\n  border-color: #1890ff;\n}\n.treejs .treejs-node__checked > .treejs-checkbox:after {\n  position: absolute;\n  content: ' ';\n  display: block;\n  top: 4px;\n  left: 5px;\n  width: 5px;\n  height: 9px;\n  border: 2px solid #fff;\n  border-top: none;\n  border-left: none;\n  -webkit-transform: rotate(45deg);\n      -ms-transform: rotate(45deg);\n          transform: rotate(45deg);\n}\n.treejs .treejs-node__halfchecked > .treejs-checkbox:before {\n  background-color: #1890ff;\n  border-color: #1890ff;\n}\n.treejs .treejs-node__halfchecked > .treejs-checkbox:after {\n  position: absolute;\n  content: ' ';\n  display: block;\n  top: 9px;\n  left: 3px;\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n}\n.treejs .treejs-node__disabled {\n  cursor: not-allowed;\n  color: rgba(0, 0, 0, 0.25);\n}\n.treejs .treejs-node__disabled .treejs-checkbox {\n  cursor: not-allowed;\n}\n.treejs .treejs-node__disabled .treejs-checkbox:before {\n  cursor: not-allowed;\n  border-color: #d9d9d9 !important;\n  background-color: #f5f5f5 !important;\n}\n.treejs .treejs-node__disabled .treejs-checkbox:hover:before {\n  -webkit-box-shadow: none !important;\n          box-shadow: none !important;\n}\n.treejs .treejs-node__disabled .treejs-node__checked > .treejs-checkbox:after {\n  border-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled .treejs-node__halfchecked > .treejs-checkbox:after {\n  background-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled.treejs-node__checked > .treejs-checkbox:after {\n  border-color: #d9d9d9;\n}\n.treejs .treejs-node__disabled.treejs-node__halfchecked > .treejs-checkbox:after {\n  background-color: #d9d9d9;\n}\n.treejs .treejs-label {\n  vertical-align: middle;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
@@ -918,7 +202,7 @@ function toComment(sourceMap) {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
@@ -1304,7 +588,7 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
 
 /**
@@ -1398,6 +682,628 @@ module.exports = function (css) {
 
 
 /***/ })
-/******/ ])["default"];
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ Tree; }
+/* harmony export */ });
+/* harmony import */ var _ajax__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _index_less__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _index_less__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_index_less__WEBPACK_IMPORTED_MODULE_1__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+function uniq(arr) {
+  var map = {};
+  return arr.reduce(function (acc, item) {
+    if (!map[item]) {
+      map[item] = true;
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+}
+function empty(ele) {
+  while (ele.firstChild) {
+    ele.removeChild(ele.firstChild);
+  }
+}
+function animation(duration, callback) {
+  requestAnimationFrame(function () {
+    callback.enter();
+    requestAnimationFrame(function () {
+      callback.active();
+      setTimeout(function () {
+        callback.leave();
+      }, duration);
+    });
+  });
+}
+function collapseFromLeaf(tree, leafNode) {
+  try {
+    var nodeLiElement = tree.liElementsById[leafNode.parent.id];
+    if (!nodeLiElement.classList.contains('treejs-node__close')) {
+      nodeLiElement.getElementsByClassName('treejs-switcher')[0].click();
+    }
+  } catch (error) {
+    return;
+  }
+  if (leafNode.hasOwnProperty('parent')) {
+    collapseFromLeaf(tree, leafNode.parent);
+  }
+}
+function expandFromRoot(tree, root) {
+  var nodeLiElement = tree.liElementsById[root.id];
+  if (nodeLiElement.classList.contains('treejs-node__close')) {
+    nodeLiElement.getElementsByClassName('treejs-switcher')[0].click();
+  }
+  if (root.hasOwnProperty('children')) {
+    var _iterator = _createForOfIteratorHelper(root.children),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var child = _step.value;
+        expandFromRoot(tree, child);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }
+}
+function Tree(container, options) {
+  var _this = this;
+  var defaultOptions = {
+    selectMode: 'checkbox',
+    values: [],
+    disables: [],
+    beforeLoad: null,
+    loaded: null,
+    url: null,
+    method: 'GET',
+    closeDepth: null,
+    console: false,
+    labelClass: '',
+    checkboxClass: '',
+    liClass: '',
+    ulClass: '',
+    switcherClass: ''
+  };
+  this.treeNodes = [];
+  this.nodesById = {};
+  this.leafNodesById = {};
+  this.liElementsById = {};
+  this.willUpdateNodesById = {};
+  this.container = container;
+  this.options = Object.assign(defaultOptions, options);
+  Object.defineProperties(this, {
+    values: {
+      get: function get() {
+        return this.getValues();
+      },
+      set: function set(values) {
+        return this.setValues(uniq(values));
+      }
+    },
+    disables: {
+      get: function get() {
+        return this.getDisables();
+      },
+      set: function set(values) {
+        return this.setDisables(uniq(values));
+      }
+    },
+    selectedNodes: {
+      get: function get() {
+        var nodes = [];
+        var nodesById = this.nodesById;
+        for (var id in nodesById) {
+          if (nodesById.hasOwnProperty(id) && (nodesById[id].status === 1 || nodesById[id].status === 2)) {
+            var node = Object.assign({}, nodesById[id]);
+            delete node.parent;
+            delete node.children;
+            nodes.push(node);
+          }
+        }
+        return nodes;
+      }
+    },
+    disabledNodes: {
+      get: function get() {
+        var nodes = [];
+        var nodesById = this.nodesById;
+        for (var id in nodesById) {
+          if (nodesById.hasOwnProperty(id) && nodesById[id].disabled) {
+            var node = Object.assign({}, nodesById[id]);
+            delete node.parent;
+            nodes.push(node);
+          }
+        }
+        return nodes;
+      }
+    }
+  });
+  if (this.options.url) {
+    this.load(function (data) {
+      _this.init(data);
+    });
+  } else {
+    this.init(this.options.data);
+  }
+}
+Tree.prototype.init = function (data) {
+  if (this.options.console) {
+    console.time('init');
+  }
+  var _Tree$parseTreeData = Tree.parseTreeData(data),
+    treeNodes = _Tree$parseTreeData.treeNodes,
+    nodesById = _Tree$parseTreeData.nodesById,
+    leafNodesById = _Tree$parseTreeData.leafNodesById,
+    defaultValues = _Tree$parseTreeData.defaultValues,
+    defaultDisables = _Tree$parseTreeData.defaultDisables;
+  this.treeNodes = treeNodes;
+  this.nodesById = nodesById;
+  this.leafNodesById = leafNodesById;
+  this.render(this.treeNodes);
+  var _this$options = this.options,
+    values = _this$options.values,
+    disables = _this$options.disables,
+    loaded = _this$options.loaded;
+  if (values && values.length) defaultValues = values;
+  defaultValues.length && this.setValues(defaultValues);
+  if (disables && disables.length) defaultDisables = disables;
+  defaultDisables.length && this.setDisables(defaultDisables);
+  loaded && loaded.call(this);
+  if (this.options.console) {
+    console.timeEnd('init');
+  }
+};
+Tree.prototype.load = function (callback) {
+  var _this2 = this;
+  if (this.options.console) {
+    console.time('load');
+  }
+  var _this$options2 = this.options,
+    url = _this$options2.url,
+    method = _this$options2.method,
+    beforeLoad = _this$options2.beforeLoad;
+  (0,_ajax__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    url: url,
+    method: method,
+    success: function success(result) {
+      var data = result;
+      if (_this2.options.console) {
+        console.timeEnd('load');
+      }
+      if (beforeLoad) {
+        data = beforeLoad(result);
+      }
+      callback(data);
+    }
+  });
+};
+Tree.prototype.render = function (treeNodes) {
+  var treeEle = Tree.createRootEle();
+  treeEle.appendChild(this.buildTree(treeNodes, 0));
+  this.bindEvent(treeEle);
+  var ele = document.querySelector(this.container);
+  empty(ele);
+  ele.appendChild(treeEle);
+};
+Tree.prototype.buildTree = function (nodes, depth) {
+  var _this3 = this;
+  var rootUlEle = Tree.createUlEle();
+  if (nodes && nodes.length) {
+    nodes.forEach(function (node) {
+      var liEle = Tree.createLiEle(node, depth === _this3.options.closeDepth - 1);
+      _this3.liElementsById[node.id] = liEle;
+      var ulEle = null;
+      if (node.children && node.children.length) {
+        ulEle = _this3.buildTree(node.children, depth + 1);
+      }
+      ulEle && liEle.appendChild(ulEle);
+      rootUlEle.appendChild(liEle);
+    });
+  }
+  return rootUlEle;
+};
+Tree.prototype.bindEvent = function (ele) {
+  var _this4 = this;
+  ele.addEventListener('click', function (e) {
+    var target = e.target;
+    if (target.nodeName === 'SPAN' && (target.classList.contains('treejs-checkbox') || target.classList.contains('treejs-label'))) {
+      _this4.onItemClick(target.parentNode.nodeId);
+    } else if (target.nodeName === 'LI' && target.classList.contains('treejs-node')) {
+      _this4.onItemClick(target.nodeId);
+    } else if (target.nodeName === 'SPAN' && target.classList.contains('treejs-switcher')) {
+      _this4.onSwitcherClick(target);
+    }
+  }, false);
+};
+Tree.prototype.onItemClick = function (id) {
+  if (this.options.console) {
+    console.time('onItemClick');
+  }
+  var node = this.nodesById[id];
+  var onChange = this.options.onChange;
+  if (!node.disabled) {
+    this.setValue(id);
+    this.updateLiElements();
+  }
+  onChange && onChange.call(this);
+  if (this.options.console) {
+    console.timeEnd('onItemClick');
+  }
+};
+Tree.prototype.setValue = function (value) {
+  var node = this.nodesById[value];
+  if (!node) return;
+  var prevStatus = node.status;
+  var status = prevStatus === 1 || prevStatus === 2 ? 0 : 2;
+  node.status = status;
+  this.markWillUpdateNode(node);
+  this.walkUp(node, 'status');
+  this.walkDown(node, 'status');
+};
+Tree.prototype.getValues = function () {
+  var values = [];
+  for (var id in this.leafNodesById) {
+    if (this.leafNodesById.hasOwnProperty(id)) {
+      if (this.leafNodesById[id].status === 1 || this.leafNodesById[id].status === 2) {
+        values.push(id);
+      }
+    }
+  }
+  return values;
+};
+Tree.prototype.setValues = function (values) {
+  var _this5 = this;
+  this.emptyNodesCheckStatus();
+  values.forEach(function (value) {
+    _this5.setValue(value);
+  });
+  this.updateLiElements();
+  var onChange = this.options.onChange;
+  onChange && onChange.call(this);
+};
+Tree.prototype.setDisable = function (value) {
+  var node = this.nodesById[value];
+  if (!node) return;
+  var prevDisabled = node.disabled;
+  if (!prevDisabled) {
+    node.disabled = true;
+    this.markWillUpdateNode(node);
+    this.walkUp(node, 'disabled');
+    this.walkDown(node, 'disabled');
+  }
+};
+Tree.prototype.getDisables = function () {
+  var values = [];
+  for (var id in this.leafNodesById) {
+    if (this.leafNodesById.hasOwnProperty(id)) {
+      if (this.leafNodesById[id].disabled) {
+        values.push(id);
+      }
+    }
+  }
+  return values;
+};
+Tree.prototype.setDisables = function (values) {
+  var _this6 = this;
+  this.emptyNodesDisable();
+  values.forEach(function (value) {
+    _this6.setDisable(value);
+  });
+  this.updateLiElements();
+};
+Tree.prototype.emptyNodesCheckStatus = function () {
+  this.willUpdateNodesById = this.getSelectedNodesById();
+  Object.values(this.willUpdateNodesById).forEach(function (node) {
+    if (!node.disabled) node.status = 0;
+  });
+};
+Tree.prototype.emptyNodesDisable = function () {
+  this.willUpdateNodesById = this.getDisabledNodesById();
+  Object.values(this.willUpdateNodesById).forEach(function (node) {
+    node.disabled = false;
+  });
+};
+Tree.prototype.getSelectedNodesById = function () {
+  return Object.entries(this.nodesById).reduce(function (acc, _ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+      id = _ref2[0],
+      node = _ref2[1];
+    if (node.status === 1 || node.status === 2) {
+      acc[id] = node;
+    }
+    return acc;
+  }, {});
+};
+Tree.prototype.getDisabledNodesById = function () {
+  return Object.entries(this.nodesById).reduce(function (acc, _ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+      id = _ref4[0],
+      node = _ref4[1];
+    if (node.disabled) {
+      acc[id] = node;
+    }
+    return acc;
+  }, {});
+};
+Tree.prototype.updateLiElements = function () {
+  var _this7 = this;
+  Object.values(this.willUpdateNodesById).forEach(function (node) {
+    _this7.updateLiElement(node);
+  });
+  this.willUpdateNodesById = {};
+};
+Tree.prototype.markWillUpdateNode = function (node) {
+  this.willUpdateNodesById[node.id] = node;
+};
+Tree.prototype.onSwitcherClick = function (target) {
+  var liEle = target.parentNode;
+  var ele = liEle.lastChild;
+  var height = ele.scrollHeight;
+  if (liEle.classList.contains('treejs-node__close')) {
+    animation(150, {
+      enter: function enter() {
+        ele.style.height = 0;
+        ele.style.opacity = 0;
+      },
+      active: function active() {
+        ele.style.height = "".concat(height, "px");
+        ele.style.opacity = 1;
+      },
+      leave: function leave() {
+        ele.style.height = '';
+        ele.style.opacity = '';
+        liEle.classList.remove('treejs-node__close');
+      }
+    });
+  } else {
+    animation(150, {
+      enter: function enter() {
+        ele.style.height = "".concat(height, "px");
+        ele.style.opacity = 1;
+      },
+      active: function active() {
+        ele.style.height = 0;
+        ele.style.opacity = 0;
+      },
+      leave: function leave() {
+        ele.style.height = '';
+        ele.style.opacity = '';
+        liEle.classList.add('treejs-node__close');
+      }
+    });
+  }
+};
+Tree.prototype.walkUp = function (node, changeState) {
+  var parent = node.parent;
+  if (parent) {
+    if (changeState === 'status') {
+      var pStatus = null;
+      var statusCount = parent.children.reduce(function (acc, child) {
+        if (!isNaN(child.status)) return acc + child.status;
+        return acc;
+      }, 0);
+      if (statusCount) {
+        pStatus = statusCount === parent.children.length * 2 ? 2 : 1;
+      } else {
+        pStatus = 0;
+      }
+      if (parent.status === pStatus) return;
+      parent.status = pStatus;
+    } else {
+      var pDisabled = parent.children.reduce(function (acc, child) {
+        return acc && child.disabled;
+      }, true);
+      if (parent.disabled === pDisabled) return;
+      parent.disabled = pDisabled;
+    }
+    this.markWillUpdateNode(parent);
+    this.walkUp(parent, changeState);
+  }
+};
+Tree.prototype.walkDown = function (node, changeState) {
+  var _this8 = this;
+  if (node.children && node.children.length) {
+    node.children.forEach(function (child) {
+      if (changeState === 'status' && child.disabled) return;
+      child[changeState] = node[changeState];
+      _this8.markWillUpdateNode(child);
+      _this8.walkDown(child, changeState);
+    });
+  }
+};
+Tree.prototype.updateLiElement = function (node) {
+  var classList = this.liElementsById[node.id].classList;
+  switch (node.status) {
+    case 0:
+      classList.remove('treejs-node__halfchecked', 'treejs-node__checked');
+      break;
+    case 1:
+      classList.remove('treejs-node__checked');
+      classList.add('treejs-node__halfchecked');
+      break;
+    case 2:
+      classList.remove('treejs-node__halfchecked');
+      classList.add('treejs-node__checked');
+      break;
+  }
+  switch (node.disabled) {
+    case true:
+      if (!classList.contains('treejs-node__disabled')) {
+        classList.add('treejs-node__disabled');
+      }
+      break;
+    case false:
+      if (classList.contains('treejs-node__disabled')) {
+        classList.remove('treejs-node__disabled');
+      }
+      break;
+  }
+};
+Tree.prototype.collapseAll = function () {
+  var leafNodesById = this.leafNodesById;
+  for (var id in leafNodesById) {
+    var leafNode = leafNodesById[id];
+    collapseFromLeaf(this, leafNode);
+  }
+};
+Tree.prototype.expandAll = function () {
+  expandFromRoot(this, this.treeNodes[0]);
+};
+Tree.parseTreeData = function (data) {
+  var treeNodes = deepClone(data);
+  var nodesById = {};
+  var leafNodesById = {};
+  var values = [];
+  var disables = [];
+  var walkTree = function walkTree(nodes, parent) {
+    nodes.forEach(function (node) {
+      nodesById[node.id] = node;
+      if (node.checked) values.push(node.id);
+      if (node.disabled) disables.push(node.id);
+      if (parent) node.parent = parent;
+      if (node.children && node.children.length) {
+        walkTree(node.children, node);
+      } else {
+        leafNodesById[node.id] = node;
+      }
+    });
+  };
+  walkTree(treeNodes);
+  return {
+    treeNodes: treeNodes,
+    nodesById: nodesById,
+    leafNodesById: leafNodesById,
+    defaultValues: values,
+    defaultDisables: disables
+  };
+};
+Tree.createRootEle = function () {
+  var div = document.createElement('div');
+  div.classList.add('treejs');
+  return div;
+};
+Tree.createUlEle = function (options) {
+  var ul = document.createElement('ul');
+  ul.classList.add('treejs-nodes');
+  if (options && options.ulClass) ul.classList.add(options.ulClass);
+  return ul;
+};
+Tree.createLiEle = function (node, closed, options) {
+  var li = document.createElement('li');
+  li.classList.add('treejs-node');
+  if (options && options.liClass) li.classList.add(options.liClass);
+  if (closed) li.classList.add('treejs-node__close');
+  if (node.children && node.children.length) {
+    var switcher = document.createElement('span');
+    switcher.classList.add('treejs-switcher');
+    if (options && options.switcherClass) switcher.classList.add(options.switcherClass);
+    li.appendChild(switcher);
+  } else {
+    li.classList.add('treejs-placeholder');
+  }
+  var checkbox = document.createElement('span');
+  checkbox.classList.add('treejs-checkbox');
+  if (options && options.checkboxClass) checkbox.classList.add(options.checkboxClass);
+  li.appendChild(checkbox);
+  var label = document.createElement('span');
+  label.classList.add('treejs-label');
+  if (options && options.labelClass) label.classList.add(options.labelClass);
+  var text = document.createTextNode(node.text);
+  label.appendChild(text);
+  li.appendChild(label);
+  li.nodeId = node.id;
+  return li;
+};
+}();
+__webpack_exports__ = __webpack_exports__["default"];
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
 //# sourceMappingURL=tree.js.map
