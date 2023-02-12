@@ -6,3 +6,6 @@ out
 
 # Ignore all JavaScript files:
 *.js
+
+# Ignore Changelog
+CHANGELOG.md

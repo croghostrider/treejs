@@ -78,16 +78,22 @@ const myTree = new Tree("#container", {
 
 ## Parameters
 
-| Name       | Type     | Description                                                         |
-| ---------- | -------- | ------------------------------------------------------------------- |
-| url        | string   | a URL to retrieve remote data,or use `data`                         |
-| method     | string   | http method(GET/POST), default 'GET'                                |
-| data       | array    | the json tree data                                                  |
-| values     | array    | ids which you want to check                                         |
-| closeDepth | integer  | expand level                                                        |
-| beforeLoad | function | invoke before the tree load data. Format raw data in this function. |
-| loaded     | function | invoke after the tree load data                                     |
-| onChange   | function | invoke when the node status change                                  |
+| Name          | Type     | Description                                                         |
+| ------------- | -------- | ------------------------------------------------------------------- |
+| url           | string   | a URL to retrieve remote data,or use `data`                         |
+| method        | string   | http method(GET/POST), default 'GET'                                |
+| data          | array    | the json tree data                                                  |
+| values        | array    | ids which you want to check                                         |
+| closeDepth    | integer  | expand level                                                        |
+| beforeLoad    | function | invoke before the tree load data. Format raw data in this function. |
+| loaded        | function | invoke after the tree load data                                     |
+| onChange      | function | invoke when the node status change                                  |
+| ulClass       | string   | add a CSS class to the ul-Element                                   |
+| liClass       | string   | add a CSS class to the li-Element                                   |
+| checkboxClass | string   | add a CSS class to the checkbox                                     |
+| labelClass    | string   | add a CSS class to the label                                        |
+| switcherClass | string   | add a CSS class to the switcher (expand / collapse Icon)            |
+| console       | boolean  | shows the console output - Default false                            |
 
 ### Example
 

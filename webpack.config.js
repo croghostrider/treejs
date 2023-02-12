@@ -62,6 +62,6 @@ module.exports = {
     new webpack.BannerPlugin(
       'treejs\n@version 1.8.0\n@see https://github.com/daweilv/treejs'
     ),
-    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false })
+    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false, reportTitle: 'Report' })
   ]
 }
