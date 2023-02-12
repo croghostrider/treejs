@@ -836,7 +836,7 @@ Tree.prototype.buildTree = function (nodes, depth) {
   var rootUlEle = Tree.createUlEle();
   if (nodes && nodes.length) {
     nodes.forEach(function (node) {
-      var liEle = Tree.createLiEle(node, depth <= _this3.options.closeDepth - 1);
+      var liEle = Tree.createLiEle(node, depth >= _this3.options.closeDepth - 1);
       _this3.liElementsById[node.id] = liEle;
       var ulEle = null;
       if (node.children && node.children.length) {
