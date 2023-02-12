@@ -65,6 +65,7 @@ export default function Tree(container, options) {
     url: null,
     method: 'GET',
     closeDepth: null,
+    console: false
   };
   this.treeNodes = [];
   this.nodesById = {};
@@ -135,7 +136,9 @@ export default function Tree(container, options) {
 }
 
 Tree.prototype.init = function(data) {
-  console.time('init');
+  if (this.options.console) {
+    console.time('init');
+  }
   let {
     treeNodes,
     nodesById,
@@ -153,18 +156,24 @@ Tree.prototype.init = function(data) {
   if (disables && disables.length) defaultDisables = disables;
   defaultDisables.length && this.setDisables(defaultDisables);
   loaded && loaded.call(this);
-  console.timeEnd('init');
+  if (this.options.console) {
+    console.timeEnd('init');
+  }
 };
 
 Tree.prototype.load = function(callback) {
-  console.time('load');
+  if (this.options.console) {
+    console.time('load');
+  }
   const {url, method, beforeLoad} = this.options;
   ajax({
     url,
     method,
     success: result => {
       let data = result;
-      console.timeEnd('load');
+      if (this.options.console) {
+        console.timeEnd('load');
+      }
       if (beforeLoad) {
         data = beforeLoad(result);
       }
@@ -230,7 +239,9 @@ Tree.prototype.bindEvent = function(ele) {
 };
 
 Tree.prototype.onItemClick = function(id) {
-  console.time('onItemClick');
+  if (this.options.console) {
+    console.time('onItemClick');
+  }
   const node = this.nodesById[id];
   const {onChange} = this.options;
   if (!node.disabled) {
@@ -238,7 +249,9 @@ Tree.prototype.onItemClick = function(id) {
     this.updateLiElements();
   }
   onChange && onChange.call(this);
-  console.timeEnd('onItemClick');
+  if (this.options.console) {
+    console.timeEnd('onItemClick');
+  }
 };
 
 Tree.prototype.setValue = function(value) {
