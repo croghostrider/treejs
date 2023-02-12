@@ -10,10 +10,10 @@ A lightweight flexible tree widget.
 
 ## Features
 
-* 🚀 Compatible with VanillaJS / React / Vue
-* ✂️ Tiny size after gzip
-* 🎊 Zero dependence
-* 🎉 Events supported
+- 🚀 Compatible with VanillaJS / React / Vue
+- ✂️ Tiny size after gzip
+- 🎊 Zero dependence
+- 🎉 Events supported
 
 ## Demo
 
@@ -32,7 +32,7 @@ npm i -S @widgetjs/tree
 ### React/Vue usage
 
 ```js
-import Tree from '@widgetjs/tree';
+import Tree from "@widgetjs/tree";
 ```
 
 ### VanillaJS usage
@@ -45,8 +45,8 @@ import Tree from '@widgetjs/tree';
 
 `new Tree(treeContainer, parameters)`, returns initialized Tree instance.
 
-* `treeContainer` - string - css selector of the tree container(`document.querySelector` inside).
-* `parameters` - object - options of the tree.
+- `treeContainer` - string - css selector of the tree container(`document.querySelector` inside).
+- `parameters` - object - options of the tree.
 
 ## Basic Node Format
 
@@ -66,13 +66,13 @@ import Tree from '@widgetjs/tree';
 | text       | string  | tree node label                     | Required |
 | attributes | object  | custom attributes of the node       | Optional |
 | children   | array   | children of current node            | Optional |
-| checked      | boolean | whether the node is selected or not | Optional |
+| checked    | boolean | whether the node is selected or not | Optional |
 
 ### Example
 
 ```js
-const myTree = new Tree('#container', {
-  url: '/api/treeJson',
+const myTree = new Tree("#container", {
+  url: "/api/treeJson",
 });
 ```
 
@@ -94,58 +94,61 @@ const myTree = new Tree('#container', {
 ```js
 const treeData = [
   {
-    id: '0',
-    text: 'node-0',
+    id: "0",
+    text: "node-0",
     children: [
       {
-        id: '0-0',
-        text: 'node-0-0',
+        id: "0-0",
+        text: "node-0-0",
         children: [
-          {id: '0-0-0', text: 'node-0-0-0'},
-          {id: '0-0-1', text: 'node-0-0-1'},
-          {id: '0-0-2', text: 'node-0-0-2'},
+          { id: "0-0-0", text: "node-0-0-0" },
+          { id: "0-0-1", text: "node-0-0-1" },
+          { id: "0-0-2", text: "node-0-0-2" },
         ],
       },
-      {id: '0-1', text: 'node-0-1'},
+      { id: "0-1", text: "node-0-1" },
     ],
   },
   {
-    id: '1',
-    text: 'node-1',
-    children: [{id: '1-0', text: 'node-1-0'}, {id: '1-1', text: 'node-1-1'}],
+    id: "1",
+    text: "node-1",
+    children: [
+      { id: "1-0", text: "node-1-0" },
+      { id: "1-1", text: "node-1-1" },
+    ],
   },
 ];
 
-const myTree = new Tree('#container', {
+const myTree = new Tree("#container", {
   data: treeData,
 });
 ```
 
 ```js
-const myTree = new Tree('#container', {
-  url: '/api/treeJson',
-  method: 'GET',
+const myTree = new Tree("#container", {
+  url: "/api/treeJson",
+  method: "GET",
 
-  values: ['1', '2', '3'],
+  values: ["1", "2", "3"],
 
   // only expand level 1 node
   closeDepth: 1,
 
-  beforeLoad: function(rawData) {
+  beforeLoad: function (rawData) {
     function formatData() {
       // do some format
     }
     return formatData(rawData);
   },
 
-  loaded: function() {
+  loaded: function () {
     // do something or set values after Tree loaded callback
     // do not use arrow function `()=>` , if you use `this`, use function instead.
     // this context bind current tree instance
-    this.values = ['0-1'];
+    this.values = ["0-1"];
   },
 
-  onChange: function() {
+  onChange: function () {
     console.log(this.values);
   },
 });
@@ -167,7 +170,7 @@ const myTree = new Tree('#container', {
 const values = myTree.values;
 
 // set
-tree.values = ['0-1'];
+tree.values = ["0-1"];
 ```
 
 ### myTree.selectedNodes
@@ -184,7 +187,7 @@ const selectedNodes = myTree.selectedNodes;
 const disables = myTree.disables;
 
 // set
-tree.disables = ['0-1'];
+tree.disables = ["0-1"];
 ```
 
 ### myTree.disabledNodes
@@ -204,10 +207,10 @@ const disabledNodes = myTree.disabledNodes;
 
 ## Methods
 
-| Method      | Parameters   | Description                        |
-| ----------- | ------------ | ---------------------------------- |
-| expandAll   | null         | expand all tree nodes              |
-| collapseAll | null         | collapse all tree nodes            |
+| Method      | Parameters | Description             |
+| ----------- | ---------- | ----------------------- |
+| expandAll   | null       | expand all tree nodes   |
+| collapseAll | null       | collapse all tree nodes |
 
 ## License
 
