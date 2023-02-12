@@ -62,7 +62,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daweilv/treejs.git"
+    "url": "git+https://github.com/croghostrider/treejs.git"
   },
   "keywords": [
     "js",
@@ -76,9 +76,9 @@
   "author": "daweilv",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/daweilv/treejs/issues"
+    "url": "https://github.com/croghostrider/treejs/issues"
   },
-  "homepage": "https://github.com/daweilv/treejs#readme",
+  "homepage": "https://github.com/croghostrider/treejs#readme",
   "standard": {
     "ignore": [
       "dist"
