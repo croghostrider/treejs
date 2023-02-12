@@ -65,7 +65,12 @@ export default function Tree(container, options) {
     url: null,
     method: 'GET',
     closeDepth: null,
-    console: false
+    console: false,
+    labelClass: "",
+    checkboxClass: "",
+    liClass: "",
+    ulClass: "",
+    switcherClass: ""
   };
   this.treeNodes = [];
   this.nodesById = {};
@@ -519,28 +524,33 @@ Tree.createRootEle = function() {
   return div;
 };
 
-Tree.createUlEle = function() {
+Tree.createUlEle = function(options) {
   const ul = document.createElement('ul');
   ul.classList.add('treejs-nodes');
+  if (options && options.ulClass) ul.classList.add(options.ulClass);
   return ul;
 };
 
-Tree.createLiEle = function(node, closed) {
+Tree.createLiEle = function(node, closed, options) {
   const li = document.createElement('li');
   li.classList.add('treejs-node');
+  if (options && options.liClass) li.classList.add(options.liClass);
   if (closed) li.classList.add('treejs-node__close');
   if (node.children && node.children.length) {
     const switcher = document.createElement('span');
     switcher.classList.add('treejs-switcher');
+    if (options && options.switcherClass) switcher.classList.add(options.switcherClass);
     li.appendChild(switcher);
   } else {
     li.classList.add('treejs-placeholder');
   }
   const checkbox = document.createElement('span');
   checkbox.classList.add('treejs-checkbox');
+  if (options && options.checkboxClass) checkbox.classList.add(options.checkboxClass);
   li.appendChild(checkbox);
   const label = document.createElement('span');
   label.classList.add('treejs-label');
+  if (options && options.labelClass) label.classList.add(options.labelClass);
   const text = document.createTextNode(node.text);
   label.appendChild(text);
   li.appendChild(label);
