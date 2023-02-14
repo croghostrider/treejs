@@ -225,11 +225,6 @@ Tree.prototype.bindEvent = function (ele) {
       ) {
         this.onItemClick(target.parentNode.nodeId)
       } else if (
-        target.nodeName === 'LI' &&
-        target.classList.contains('treejs-node')
-      ) {
-        this.onItemClick(target.nodeId)
-      } else if (
         target.nodeName === 'SPAN' &&
         target.classList.contains('treejs-switcher')
       ) {
